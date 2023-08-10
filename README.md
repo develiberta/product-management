@@ -44,8 +44,10 @@
     - RDBMS 선택 및 데이터베이스 모델링
     - Spring Boot 프로젝트 생성
 - 2023-08-11
-    - Spring Boot API 구성
+    - 데이터베이스 생성
+    - Spring Boot API Controller 구현
 - 2023-08-12
+    - Spring Boot API Service 구현
     - 커맨드 라인 및 화면 구현
 - 2023-08-13
     - 1차 셀프 리뷰
