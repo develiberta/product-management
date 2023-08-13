@@ -20,7 +20,7 @@ public class ProductConditionalDto extends SpecCondition<ProductEntity> {
 
     @ApiModelProperty(required = false)
     @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=ProductEntity.class)
-    private Integer id;
+    private String id;
 
     @ApiModelProperty(required = false)
     @SearchCondition(value = "name", condition = SearchType.LIKE, qualifiedBy=ProductEntity.class)

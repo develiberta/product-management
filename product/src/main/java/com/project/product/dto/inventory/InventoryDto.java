@@ -4,7 +4,7 @@ import com.project.product.entity.ProductEntity;
 
 public class InventoryDto {
 
-    private Integer id;
+    private String id;
 
     private Integer remaining;
 

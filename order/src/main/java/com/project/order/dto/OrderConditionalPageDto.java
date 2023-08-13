@@ -16,7 +16,7 @@ public class OrderConditionalPageDto extends PageCondition<OrderEntity> {
 
     @ApiModelProperty(required = false)
     @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=OrderEntity.class)
-    private Integer id;
+    private String id;
 
     private Integer count;
 

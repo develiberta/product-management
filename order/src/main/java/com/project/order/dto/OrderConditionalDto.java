@@ -17,7 +17,7 @@ public class OrderConditionalDto extends SpecCondition<OrderEntity> {
 
     @ApiModelProperty(required = false)
     @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=OrderEntity.class)
-    private Integer id;
+    private String id;
 
     private Integer count;
 
