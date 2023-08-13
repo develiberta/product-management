@@ -29,8 +29,8 @@ public class ProductController {
         return ResponseEntity.ok().body(new ObjectResponse<ProductDto>(productService.getProduct(item)));
     }
 
-    @ApiOperation(value="상품 목록 페이지 조회")
-    @GetMapping(value="/page", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="상품 목록 조회 (페이지)")
+    @GetMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<ProductDto>> page(
             @ModelAttribute ProductConditionalPageDto condition
     ) throws Exception {
@@ -55,7 +55,7 @@ public class ProductController {
     }
 
     @ApiOperation(value="상품 삭제")
-    @DeleteMapping(value="/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectResponse<String>> delete(
             @PathVariable("id") ProductEntity entity
     ) throws Exception {
