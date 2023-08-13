@@ -1,6 +1,6 @@
 package com.project.order.response;
 
-import com.project.order.constant.ProductConstant;
+import com.project.order.constant.OrderConstant;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,7 @@ public class ApiResponse<T> {
 	public ApiResponse() {
 		this.status = HttpStatus.OK.value();
 		this.error = HttpStatus.OK.name();
-		this.message = ProductConstant.EMPTY_STR;
+		this.message = OrderConstant.EMPTY_STR;
 		this.timestamp = new Date();
 	}	
 	

@@ -7,12 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -21,26 +16,33 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(
-        name = "product",
+        name = "tb_product",
         indexes = {
-                @Index(name = "product_idx_01", columnList = "name")
+                @Index(name = "idx_product_01", columnList = "name")
         })
 public class ProductEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name="id")
     private Integer id;
 
+    @Column(name="name")
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name="origin")
     private Origin origin;
 
+    @Column(name="price")
     private Integer price;
 
+    @Column(name="cost")
     private Integer cost;
 
+    @Column(name="image")
     private String image;
 
+    @Column(name="description")
     private String description;
 }
