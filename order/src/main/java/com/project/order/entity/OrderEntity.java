@@ -1,6 +1,7 @@
 package com.project.order.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,8 +20,13 @@ public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(name="id")
-    private Integer id;
+    private String id;
 
     @Column(name="count")
     private Integer count;
