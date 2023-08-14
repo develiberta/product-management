@@ -1,10 +1,10 @@
 package com.project.product.controller;
 
+import com.project.lib.response.ObjectResponse;
+import com.project.lib.response.PageResponse;
 import com.project.product.dto.product.ProductConditionalPageDto;
 import com.project.product.dto.product.ProductDto;
 import com.project.product.entity.ProductEntity;
-import com.project.product.response.ObjectResponse;
-import com.project.product.response.PageResponse;
 import com.project.product.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,5 +1,6 @@
 package com.project.product.service;
 
+import com.project.lib.service.BaseService;
 import com.project.product.dto.product.ProductConditionalPageDto;
 import com.project.product.dto.product.ProductDto;
 import com.project.product.entity.ProductEntity;

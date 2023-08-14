@@ -1,9 +1,9 @@
 package com.project.order.dto;
 
+import com.project.lib.request.PageCondition;
+import com.project.lib.search.SearchCondition;
+import com.project.lib.search.SearchType;
 import com.project.order.entity.OrderEntity;
-import com.project.order.search.SearchCondition;
-import com.project.order.search.SearchType;
-import com.project.order.request.PageCondition;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

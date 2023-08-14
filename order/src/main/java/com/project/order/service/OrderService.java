@@ -1,5 +1,6 @@
 package com.project.order.service;
 
+import com.project.lib.service.BaseService;
 import com.project.order.dto.OrderConditionalPageDto;
 import com.project.order.dto.OrderDto;
 import com.project.order.entity.OrderEntity;

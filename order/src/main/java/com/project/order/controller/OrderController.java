@@ -1,10 +1,10 @@
 package com.project.order.controller;
 
+import com.project.lib.response.ObjectResponse;
+import com.project.lib.response.PageResponse;
 import com.project.order.dto.OrderConditionalPageDto;
 import com.project.order.dto.OrderDto;
 import com.project.order.entity.OrderEntity;
-import com.project.order.response.ObjectResponse;
-import com.project.order.response.PageResponse;
 import com.project.order.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

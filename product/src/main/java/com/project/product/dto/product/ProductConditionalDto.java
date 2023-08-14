@@ -1,9 +1,9 @@
 package com.project.product.dto.product;
 
+import com.project.lib.request.SpecCondition;
+import com.project.lib.search.SearchCondition;
+import com.project.lib.search.SearchType;
 import com.project.product.entity.ProductEntity;
-import com.project.product.request.SpecCondition;
-import com.project.product.search.SearchCondition;
-import com.project.product.search.SearchType;
 import com.project.product.type.Origin;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
