@@ -1,5 +1,7 @@
 package com.project.product.entity;
 
+import com.project.product.type.Action;
+import com.project.product.type.Origin;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,11 +21,15 @@ import java.util.Date;
                 @Index(name = "idx_product_history_02", columnList = "updated_time")
         })
 public class ProductHistoryEntity extends ProductSuperEntity implements Serializable {
+    @Enumerated(EnumType.STRING)
+    @Column(name="action")
+    private Action action;
+
     @UpdateTimestamp
     @Column(name="updated_time")
-    Date updatedTime;
+    private Date updatedTime;
 
     @ManyToOne
     @JoinColumn(name="product_id", foreignKey = @ForeignKey(name="fk_product_history_product_id"))
-    ProductEntity product;
+    private ProductEntity product;
 }

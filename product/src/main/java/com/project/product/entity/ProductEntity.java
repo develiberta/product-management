@@ -25,9 +25,9 @@ import java.util.Date;
 public class ProductEntity extends ProductSuperEntity implements Serializable {
     @CreationTimestamp
     @Column(name="created_time")
-    Date createdTime;
+    private Date createdTime;
 
     @UpdateTimestamp
     @Column(name="updated_time")
-    Date updatedTime;
+    private Date updatedTime;
 }
