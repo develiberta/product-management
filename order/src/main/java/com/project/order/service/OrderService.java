@@ -26,14 +26,14 @@ public class OrderService extends BaseService {
         return orderRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, OrderDto.class));
     }
 
-    public OrderDto orderProduct(OrderDto dto) throws Exception {
+    public OrderEntity orderProduct(OrderDto dto) throws Exception {
         OrderEntity entity = orderRepository.save(modelMapper.map(dto, OrderEntity.class));
-        return dto;
+        return entity;
     }
 
-    public OrderDto changeOrder(OrderEntity entityOld, OrderDto dtoNew) throws Exception {
-        OrderEntity entitiyOld = orderRepository.save(modelMapper.map(dtoNew, OrderEntity.class));
-        return dtoNew;
+    public OrderEntity changeOrder(OrderEntity entityOld, OrderDto dtoNew) throws Exception {
+        OrderEntity entity = orderRepository.save(modelMapper.map(dtoNew, OrderEntity.class));
+        return entity;
     }
 
     public void deleteOrder(OrderEntity entity) throws Exception {

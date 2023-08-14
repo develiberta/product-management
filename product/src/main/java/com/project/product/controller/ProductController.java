@@ -39,7 +39,7 @@ public class ProductController {
     
     @ApiOperation(value="상품 등록")
     @PostMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<ProductDto>> create(
+    public ResponseEntity<ObjectResponse<ProductEntity>> create(
             @RequestBody ProductDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(productService.addProduct(dtoNew)));
@@ -47,7 +47,7 @@ public class ProductController {
 
     @ApiOperation(value="상품 갱신")
     @PutMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<ProductDto>> update(
+    public ResponseEntity<ObjectResponse<ProductEntity>> update(
             @PathVariable("id") ProductEntity entityOld,
             @RequestBody ProductDto dtoNew
     ) throws Exception {

@@ -39,7 +39,7 @@ public class OrderController {
     
     @ApiOperation(value="주문 생성")
     @PostMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<OrderDto>> create(
+    public ResponseEntity<ObjectResponse<OrderEntity>> create(
             @RequestBody OrderDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(orderService.orderProduct(dtoNew)));
@@ -47,7 +47,7 @@ public class OrderController {
 
     @ApiOperation(value="주문 갱신")
     @PutMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<OrderDto>> update(
+    public ResponseEntity<ObjectResponse<OrderEntity>> update(
             @PathVariable("id") OrderEntity entityOld,
             @RequestBody OrderDto dtoNew
     ) throws Exception {

@@ -28,14 +28,14 @@ public class ProductService extends BaseService {
         return productRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, ProductDto.class));
     }
 
-    public ProductDto addProduct(ProductDto dto) throws Exception {
+    public ProductEntity addProduct(ProductDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
-        return dto;
+        return entity;
     }
 
-    public ProductDto updateProduct(ProductEntity entityOld, ProductDto dtoNew) throws Exception {
-        ProductEntity entitiyOld = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
-        return dtoNew;
+    public ProductEntity updateProduct(ProductEntity entityOld, ProductDto dtoNew) throws Exception {
+        ProductEntity entitiy = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
+        return entitiy;
     }
 
     public void deleteProduct(ProductEntity entity) throws Exception {
