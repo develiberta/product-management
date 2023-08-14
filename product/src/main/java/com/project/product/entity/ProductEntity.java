@@ -1,15 +1,16 @@
 package com.project.product.entity;
 
-import com.project.product.type.Origin;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
@@ -21,34 +22,12 @@ import java.io.Serializable;
         indexes = {
                 @Index(name = "idx_product_01", columnList = "name")
         })
-public class ProductEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class ProductEntity extends ProductSuperEntity implements Serializable {
+    @CreationTimestamp
+    @Column(name="created_time")
+    Date createdTime;
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(name="id")
-    private String id;
-
-    @Column(name="name")
-    private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="origin")
-    private Origin origin;
-
-    @Column(name="price")
-    private Integer price;
-
-    @Column(name="cost")
-    private Integer cost;
-
-    @Column(name="image")
-    private String image;
-
-    @Column(name="description")
-    private String description;
+    @UpdateTimestamp
+    @Column(name="updated_time")
+    Date updatedTime;
 }
