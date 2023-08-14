@@ -1,5 +1,6 @@
 package com.project.product.service;
 
+import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
 import com.project.product.dto.product.ProductConditionalPageDto;
 import com.project.product.dto.product.ProductDto;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService extends BaseService {
@@ -19,6 +21,7 @@ public class ProductService extends BaseService {
     ProductRepository productRepository;
 
     public ProductDto getProduct(ProductEntity entity) throws Exception {
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         ProductDto dto = modelMapper.map(entity, ProductDto.class);
         return dto;
     }
@@ -34,11 +37,13 @@ public class ProductService extends BaseService {
     }
 
     public ProductEntity updateProduct(ProductEntity entityOld, ProductDto dtoNew) throws Exception {
+        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         ProductEntity entitiy = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
         return entitiy;
     }
 
     public void deleteProduct(ProductEntity entity) throws Exception {
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         productRepository.delete(entity);
     }
 
