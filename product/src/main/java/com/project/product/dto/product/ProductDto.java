@@ -10,8 +10,6 @@ import javax.persistence.Enumerated;
 @Data
 @ToString
 public class ProductDto {
-    private String id;
-
     private String name;
 
     @Enumerated(EnumType.STRING)
