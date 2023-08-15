@@ -1,8 +1,12 @@
 package com.project.product.type;
 
 public enum Origin {
+    USA,
     KOREA,
     CHINA,
+    JAPAN,
     CANADA,
-    USA
+    VIETNAM,
+    GERMANY,
+    ENGLAND,
 }
