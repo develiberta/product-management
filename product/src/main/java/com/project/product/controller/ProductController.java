@@ -2,8 +2,9 @@ package com.project.product.controller;
 
 import com.project.lib.response.ObjectResponse;
 import com.project.lib.response.PageResponse;
-import com.project.product.dto.product.ProductConditionalPageDto;
-import com.project.product.dto.product.ProductDto;
+import com.project.product.dto.ProductConditionalPageDto;
+import com.project.product.dto.ProductDto;
+import com.project.product.dto.ProductUpsertDto;
 import com.project.product.entity.ProductEntity;
 import com.project.product.service.ProductService;
 import io.swagger.annotations.Api;
@@ -39,17 +40,17 @@ public class ProductController {
     
     @ApiOperation(value="상품 등록")
     @PostMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<ProductEntity>> create(
-            @RequestBody ProductDto dtoNew
+    public ResponseEntity<ObjectResponse<ProductDto>> create(
+            @RequestBody ProductUpsertDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(productService.addProduct(dtoNew)));
     }
 
     @ApiOperation(value="상품 갱신")
     @PutMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<ProductEntity>> update(
+    public ResponseEntity<ObjectResponse<ProductDto>> update(
             @PathVariable("id") ProductEntity entityOld,
-            @RequestBody ProductDto dtoNew
+            @RequestBody ProductUpsertDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(productService.updateProduct(entityOld, dtoNew)));
     }

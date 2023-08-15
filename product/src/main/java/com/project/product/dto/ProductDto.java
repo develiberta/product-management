@@ -1,4 +1,4 @@
-package com.project.product.dto.product;
+package com.project.product.dto;
 
 import com.project.product.type.Origin;
 import lombok.Data;
@@ -10,6 +10,8 @@ import javax.persistence.Enumerated;
 @Data
 @ToString
 public class ProductDto {
+    private String id;
+
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -22,4 +24,6 @@ public class ProductDto {
     private String image;
 
     private String description;
+
+    private Integer remaining;
 }

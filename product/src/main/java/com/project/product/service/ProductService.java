@@ -2,8 +2,9 @@ package com.project.product.service;
 
 import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
-import com.project.product.dto.product.ProductConditionalPageDto;
-import com.project.product.dto.product.ProductDto;
+import com.project.product.dto.ProductConditionalPageDto;
+import com.project.product.dto.ProductDto;
+import com.project.product.dto.ProductUpsertDto;
 import com.project.product.entity.InventoryEntity;
 import com.project.product.entity.ProductEntity;
 import com.project.product.entity.ProductHistoryEntity;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,37 +33,52 @@ public class ProductService extends BaseService {
 
     public ProductDto getProduct(ProductEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        ProductDto dto = modelMapper.map(entity, ProductDto.class);
-        return dto;
+        ProductDto result = modelMapper.map(entity, ProductDto.class);
+        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
+        result.setRemaining(inventory.getRemaining());
+        return result;
     }
 
     public Page<ProductDto> getProductsByPagination(ProductConditionalPageDto condition) throws Exception {
         Specification<ProductEntity> spec = specBuilder.search(condition);
-        return productRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, ProductDto.class));
+        Page<ProductDto> results = productRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, ProductDto.class));
+        for (ProductDto result : results) {
+            InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
+            result.setRemaining(inventory.getRemaining());
+        }
+        return results;
     }
 
-    public ProductEntity addProduct(ProductDto dto) throws Exception {
+    public ProductDto addProduct(ProductUpsertDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
         history.setProduct(entity);
         history.setAction(Action.created);
         productHistoryRepository.save(history);
-        InventoryEntity inventory = modelMapper.map(dto, InventoryEntity.class);
-        inventory.setId(entity.getId());
+        InventoryEntity inventory = new InventoryEntity();
         inventory.setProduct(entity);
         inventory.setRemaining(0);
-        inventoryRepository.save(inventory);
-        return entity;
+        inventory = inventoryRepository.save(inventory);
+        entity.setInventory(inventory);
+        ProductDto result = modelMapper.map(entity, ProductDto.class);
+        result.setRemaining(inventory.getRemaining());
+        return result;
     }
 
-    public ProductEntity updateProduct(ProductEntity entityOld, ProductDto dtoNew) throws Exception {
+    public ProductDto updateProduct(ProductEntity entityOld, ProductUpsertDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        ProductEntity entity = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
+        ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
+        entity.setId(entityOld.getId());
+        entity.setCreatedTime(entityOld.getCreatedTime());
+        entity = productRepository.save(entity);
         ProductHistoryEntity history = modelMapper.map(dtoNew, ProductHistoryEntity.class);
         history.setProduct(entity);
         history.setAction(Action.updated);
         productHistoryRepository.save(history);
-        return entity;
+        ProductDto result = modelMapper.map(entity, ProductDto.class);
+        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
+        result.setRemaining(inventory.getRemaining());
+        return result;
     }
 
     public void deleteProduct(ProductEntity entity) throws Exception {

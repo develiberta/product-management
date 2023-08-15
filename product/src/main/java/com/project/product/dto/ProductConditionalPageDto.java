@@ -1,6 +1,6 @@
-package com.project.product.dto.product;
+package com.project.product.dto;
 
-import com.project.lib.request.SpecCondition;
+import com.project.lib.request.PageCondition;
 import com.project.lib.search.SearchCondition;
 import com.project.lib.search.SearchType;
 import com.project.product.entity.ProductEntity;
@@ -16,7 +16,7 @@ import javax.persistence.Enumerated;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @ToString
-public class ProductConditionalDto extends SpecCondition<ProductEntity> {
+public class ProductConditionalPageDto extends PageCondition<ProductEntity> {
 
     @ApiModelProperty(required = false)
     @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=ProductEntity.class)
