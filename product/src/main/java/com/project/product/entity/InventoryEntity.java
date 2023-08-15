@@ -20,18 +20,14 @@ public class InventoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(name="id")
+    @Column(name="product_id")
     private String id;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id", foreignKey = @ForeignKey(name="fk_inventory_product_id"))
+    private ProductEntity product;
 
     @Column(name="remaining")
     private Integer remaining;
 
-    @OneToOne
-    @JoinColumn(name="product_id", foreignKey = @ForeignKey(name="fk_inventory_product_id"))
-    private ProductEntity product;
 }
