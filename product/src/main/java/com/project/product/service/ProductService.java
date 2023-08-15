@@ -4,8 +4,10 @@ import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
 import com.project.product.dto.product.ProductConditionalPageDto;
 import com.project.product.dto.product.ProductDto;
+import com.project.product.entity.InventoryEntity;
 import com.project.product.entity.ProductEntity;
 import com.project.product.entity.ProductHistoryEntity;
+import com.project.product.repository.InventoryRepository;
 import com.project.product.repository.ProductHistoryRepository;
 import com.project.product.repository.ProductRepository;
 import com.project.product.type.Action;
@@ -26,6 +28,9 @@ public class ProductService extends BaseService {
     @Autowired
     ProductHistoryRepository productHistoryRepository;
 
+    @Autowired
+    InventoryRepository inventoryRepository;
+
     public ProductDto getProduct(ProductEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         ProductDto dto = modelMapper.map(entity, ProductDto.class);
@@ -40,24 +45,32 @@ public class ProductService extends BaseService {
     public ProductEntity addProduct(ProductDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
+        history.setProduct(entity);
         history.setAction(Action.created);
         productHistoryRepository.save(history);
+        InventoryEntity inventory = modelMapper.map(dto, InventoryEntity.class);
+        inventory.setId(entity.getId());
+        inventory.setProduct(entity);
+        inventory.setRemaining(0);
+        inventoryRepository.save(inventory);
         return entity;
     }
 
     public ProductEntity updateProduct(ProductEntity entityOld, ProductDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        ProductEntity entitiy = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
+        ProductEntity entity = productRepository.save(modelMapper.map(dtoNew, ProductEntity.class));
         ProductHistoryEntity history = modelMapper.map(dtoNew, ProductHistoryEntity.class);
+        history.setProduct(entity);
         history.setAction(Action.updated);
         productHistoryRepository.save(history);
-        return entitiy;
+        return entity;
     }
 
     public void deleteProduct(ProductEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         productRepository.delete(entity);
         ProductHistoryEntity history = modelMapper.map(entity, ProductHistoryEntity.class);
+        history.setProduct(entity);
         history.setAction(Action.deleted);
         productHistoryRepository.save(history);
     }
