@@ -3,6 +3,7 @@ package com.project.product.entity;
 import com.project.product.type.Action;
 import com.project.product.type.Origin;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -18,16 +19,16 @@ import java.util.Date;
         name = "tb_product_history",
         indexes = {
                 @Index(name = "idx_product_history_01", columnList = "name"),
-                @Index(name = "idx_product_history_02", columnList = "updated_time")
+                @Index(name = "idx_product_history_02", columnList = "created_time")
         })
 public class ProductHistoryEntity extends ProductSuperEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name="action")
     private Action action;
 
-    @UpdateTimestamp
-    @Column(name="updated_time")
-    private Date updatedTime;
+    @CreationTimestamp
+    @Column(name="created_time")
+    private Date createdTime;
 
     @ManyToOne
     @JoinColumn(name="product_id", foreignKey = @ForeignKey(name="fk_product_history_product_id"))
