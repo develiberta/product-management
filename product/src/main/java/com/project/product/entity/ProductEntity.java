@@ -18,9 +18,9 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(
-        name = "tb_product",
-        indexes = {
-                @Index(name = "idx_product_01", columnList = "name")
+        name="tb_product",
+        indexes={
+                @Index(name="idx_product_01", columnList="name")
         })
 public class ProductEntity extends ProductSuperEntity implements Serializable {
     @CreationTimestamp
@@ -30,4 +30,7 @@ public class ProductEntity extends ProductSuperEntity implements Serializable {
     @UpdateTimestamp
     @Column(name="updated_time")
     private Date updatedTime;
+
+    @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    InventoryEntity inventory;
 }

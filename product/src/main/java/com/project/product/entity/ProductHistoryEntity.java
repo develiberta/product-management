@@ -10,16 +10,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access=AccessLevel.PUBLIC)
 @ToString
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(
-        name = "tb_product_history",
-        indexes = {
-                @Index(name = "idx_product_history_01", columnList = "name"),
-                @Index(name = "idx_product_history_02", columnList = "created_time")
+        name="tb_product_history",
+        indexes={
+                @Index(name="idx_product_history_01", columnList="name"),
+                @Index(name="idx_product_history_02", columnList="created_time")
         })
 public class ProductHistoryEntity extends ProductSuperEntity implements Serializable {
     @Enumerated(EnumType.STRING)
@@ -31,6 +31,6 @@ public class ProductHistoryEntity extends ProductSuperEntity implements Serializ
     private Date createdTime;
 
     @ManyToOne
-    @JoinColumn(name="product_id", foreignKey = @ForeignKey(name="fk_product_history_product_id"))
+    @JoinColumn(name="product_id", foreignKey=@ForeignKey(name="fk_product_history_product_id"))
     private ProductEntity product;
 }

@@ -15,18 +15,18 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(
-        name = "tb_order",
-        indexes = {
-                @Index(name = "idx_order_01", columnList = "product_history_id")
+        name="tb_order",
+        indexes={
+                @Index(name="idx_order_01", columnList="product_history_id")
         })
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(generator = "UUID")
+    @GeneratedValue(generator="UUID")
     @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
+            name="UUID",
+            strategy="org.hibernate.id.UUIDGenerator"
     )
     @Column(name="id")
     private String id;

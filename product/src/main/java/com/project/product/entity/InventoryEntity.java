@@ -23,8 +23,8 @@ public class InventoryEntity implements Serializable {
     @Column(name="product_id")
     private String id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id", foreignKey = @ForeignKey(name="fk_inventory_product_id"))
+    @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id", foreignKey=@ForeignKey(name="fk_inventory_product_id"))
     private ProductEntity product;
 
     @Column(name="remaining")
