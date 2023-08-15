@@ -32,5 +32,7 @@ public class ProductEntity extends ProductSuperEntity implements Serializable {
     private Date updatedTime;
 
     @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+//    @JoinColumn(name="id", referencedColumnName="id", foreignKey=@ForeignKey(name="fk_product_inventory_id"))
     InventoryEntity inventory;
 }

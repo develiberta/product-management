@@ -20,11 +20,12 @@ public class InventoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="product_id")
+    @Column(name="id")
     private String id;
 
-    @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="product_id", referencedColumnName="product_id", foreignKey=@ForeignKey(name="fk_inventory_product_id"))
+    @OneToOne
+    @MapsId
+    @JoinColumn(name="id", referencedColumnName="id", foreignKey=@ForeignKey(name="fk_inventory_product_id"))
     private ProductEntity product;
 
     @Column(name="remaining")
