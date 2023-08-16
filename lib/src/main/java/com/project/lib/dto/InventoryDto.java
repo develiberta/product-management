@@ -1,10 +1,12 @@
-package com.project.product.dto;
+package com.project.lib.dto;
 
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
-public class InventoryUpsertDto {
+public class InventoryDto {
+    private String id;
+
     private Integer remaining;
 }

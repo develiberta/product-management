@@ -9,8 +9,21 @@ import javax.persistence.Enumerated;
 
 @Data
 @ToString
-public class InventoryDto {
+public class ProductSuperDto {
     private String id;
+
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private Origin origin;
+
+    private Integer price;
+
+    private Integer cost;
+
+    private String image;
+
+    private String description;
 
     private Integer remaining;
 }

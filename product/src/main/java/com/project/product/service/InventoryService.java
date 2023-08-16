@@ -1,9 +1,9 @@
 package com.project.product.service;
 
+import com.project.lib.dto.InventoryDto;
+import com.project.lib.dto.InventoryUpsertDto;
 import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
-import com.project.product.dto.InventoryDto;
-import com.project.product.dto.InventoryUpsertDto;
 import com.project.product.entity.InventoryEntity;
 import com.project.product.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
