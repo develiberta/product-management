@@ -1,5 +1,6 @@
 package com.project.product.service;
 
+import com.project.lib.dto.InventoryDto;
 import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
 import com.project.product.dto.ProductDto;
@@ -38,6 +39,13 @@ public class ProductHistoryService extends BaseService {
                 productHistoryRepository.findByProductId(entity.getId()),
                 new TypeToken<List<ProductHistoryDto>>(){}.getType()
         );
+    }
+
+    public ProductHistoryDto getRecentProductHistory(ProductEntity entity) throws Exception {
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        ProductHistoryEntity history = productHistoryRepository.findTopByIdOrderByCreatedTimeDesc(entity.getId());
+        ProductHistoryDto result = modelMapper.map(history, ProductHistoryDto.class);
+        return result;
     }
 
 }

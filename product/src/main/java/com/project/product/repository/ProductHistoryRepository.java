@@ -12,4 +12,6 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistoryEn
 
     List<ProductHistoryEntity> findByProductId(String productId);
 
+    ProductHistoryEntity findTopByIdOrderByCreatedTimeDesc(String productId);
+
 }

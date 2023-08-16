@@ -39,4 +39,12 @@ public class ProductHistoryController {
         return ResponseEntity.ok().body(new ObjectResponse<>(producthistoryService.getProductByProductHistory(item)));
     }
 
+    @ApiOperation(value="상품 최신 이력 조회")
+    @GetMapping(value="/recent_history/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ObjectResponse<ProductHistoryDto>> getRecentProductHistory(
+            @PathVariable("id") ProductEntity item
+    ) throws Exception {
+        return ResponseEntity.ok().body(new ObjectResponse<>(producthistoryService.getRecentProductHistory(item)));
+    }
+
 }
