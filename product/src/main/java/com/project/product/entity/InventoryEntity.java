@@ -2,6 +2,7 @@ package com.project.product.entity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(
         name = "tb_inventory",
         indexes = {

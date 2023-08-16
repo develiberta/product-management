@@ -3,6 +3,7 @@ package com.project.product.entity;
 import com.project.product.type.Action;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(
         name="tb_product_history",
         indexes={
