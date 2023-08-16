@@ -1,6 +1,7 @@
 package com.project.lib.service;
 
 import com.project.lib.search.SpecBuilder;
+import com.project.lib.utils.JacksonMapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,5 +16,8 @@ public class BaseService {
 
 	@Autowired
 	protected ModelMapper modelMapper;
+
+	@Autowired
+	protected JacksonMapper jacksonMapper;
 
 }
