@@ -52,7 +52,7 @@ public class ProductService extends BaseService {
     public ProductDto addProduct(ProductUpsertDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
-        history.setProduct(entity);
+        history.setProductId(entity.getId());
         history.setAction(Action.created);
         productHistoryRepository.save(history);
         InventoryEntity inventory = new InventoryEntity();
@@ -72,7 +72,7 @@ public class ProductService extends BaseService {
         entity.setCreatedTime(entityOld.getCreatedTime());
         entity = productRepository.save(entity);
         ProductHistoryEntity history = modelMapper.map(dtoNew, ProductHistoryEntity.class);
-        history.setProduct(entity);
+        history.setProductId(entity.getId());
         history.setAction(Action.updated);
         productHistoryRepository.save(history);
         ProductDto result = modelMapper.map(entity, ProductDto.class);
@@ -83,9 +83,10 @@ public class ProductService extends BaseService {
 
     public void deleteProduct(ProductEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+//        inventoryRepository.deleteById(entity.getId());
         productRepository.delete(entity);
         ProductHistoryEntity history = modelMapper.map(entity, ProductHistoryEntity.class);
-        history.setProduct(entity);
+        history.setProductId(entity.getId());
         history.setAction(Action.deleted);
         productHistoryRepository.save(history);
     }

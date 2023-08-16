@@ -25,7 +25,7 @@ public class InventoryEntity implements Serializable {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name="id", referencedColumnName="id", foreignKey=@ForeignKey(name="fk_inventory_product_id"))
+    @PrimaryKeyJoinColumn(name="id", referencedColumnName="id", foreignKey=@ForeignKey(name="fk_inventory_product_id"))
     private ProductEntity product;
 
     @Column(name="remaining")

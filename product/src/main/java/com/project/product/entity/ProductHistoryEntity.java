@@ -30,7 +30,6 @@ public class ProductHistoryEntity extends ProductSuperEntity implements Serializ
     @Column(name="created_time")
     private Date createdTime;
 
-    @ManyToOne
-    @JoinColumn(name="product_id", foreignKey=@ForeignKey(name="fk_product_history_product_id"))
-    private ProductEntity product;
+    @Column(name="product_id")
+    private String productId;
 }
