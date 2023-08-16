@@ -35,6 +35,10 @@ public class OrderEntity implements Serializable {
     private Integer count;
 
     /* Product Aplication Database Schema가 달라서 FK 불가 */
+    @Column(name="product_id")
+    private String productId;
+
+    /* Product Aplication Database Schema가 달라서 FK 불가 */
     @Column(name="product_history_id")
     private String productHistoryId;
 

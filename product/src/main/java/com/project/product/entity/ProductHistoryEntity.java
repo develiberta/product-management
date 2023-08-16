@@ -1,10 +1,8 @@
 package com.project.product.entity;
 
 import com.project.product.type.Action;
-import com.project.product.type.Origin;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,20 +1,19 @@
 package com.project.order.service;
 
-import com.project.lib.dto.InventoryDto;
-import com.project.lib.dto.InventoryUpsertDto;
+import com.project.lib.dto.*;
 import com.project.lib.exception.DataException;
+import com.project.lib.exception.ServiceException;
 import com.project.lib.service.BaseService;
-import com.project.order.dto.OnDemandResponseDto;
-import com.project.order.dto.OrderConditionalPageDto;
-import com.project.order.dto.OrderDto;
-import com.project.order.dto.OrderUpsertDto;
+import com.project.order.dto.OrderConditionalDto;
 import com.project.order.entity.OrderEntity;
 import com.project.order.repository.OrderRepository;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,64 +28,90 @@ public class OrderService extends BaseService {
 
     public OrderDto getOrder(OrderEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        OrderDto dto = modelMapper.map(entity, OrderDto.class);
-        return dto;
+        ProductHistoryDto history = getProductHistory(entity.getProductHistoryId());
+        OrderDto result = modelMapper.map(entity, OrderDto.class);
+        result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
+        return result;
     }
 
-    public Page<OrderDto> getOrders(OrderConditionalPageDto condition) throws Exception {
+    public List<OrderDto> getOrders(OrderConditionalDto condition) throws Exception {
         Specification<OrderEntity> spec = specBuilder.search(condition);
-        return orderRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, OrderDto.class));
+        List<OrderDto> results = modelMapper.map(orderRepository.findAll(spec),
+                new TypeToken<List<OrderDto>>(){}.getType()
+        );
+        for (OrderDto result : results) {
+            ProductHistoryDto history = getProductHistory(result.getProductHistoryId());
+            result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
+        }
+
+        return results;
     }
 
     public OrderDto orderProduct(OrderUpsertDto dto) throws Exception {
-        if (isEnoughRemaining(dto.getProductId(), dto.getCount()) == false) throw new DataException("재고가 충분하지 않습니다.");
-        InventoryUpsertDto inventory = new InventoryUpsertDto();
-        inventory.setRemaining(inventory.getRemaining() - dto.getCount());
-        updateRemaining(dto.getProductId(), inventory);
-        OrderEntity entity = orderRepository.save(modelMapper.map(dto, OrderEntity.class));
-        return modelMapper.map(entity, OrderDto.class);
+        InventoryDto inventory = getRemaining(dto.getProductId());
+        Integer remaining = inventory.getRemaining() - dto.getCount();
+        if (remaining < 0) throw new DataException("재고가 충분하지 않습니다.");
+        updateRemaining(dto.getProductId(), new InventoryUpsertDto(remaining));
+        OrderEntity entity = modelMapper.map(dto, OrderEntity.class);
+        ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
+        entity.setProductHistoryId(history.getId());
+        entity = orderRepository.save(entity);
+        OrderDto result = modelMapper.map(entity, OrderDto.class);
+        result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
+        return result;
     }
 
     public OrderDto changeOrder(OrderEntity entityOld, OrderUpsertDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        if (isEnoughRemaining(dtoNew.getProductId(), dtoNew.getCount()) == false) throw new DataException("재고가 충분하지 않습니다.");
-        OrderEntity entity = orderRepository.save(modelMapper.map(dtoNew, OrderEntity.class));
-        return modelMapper.map(entity, OrderDto.class);
+        InventoryDto inventory = getRemaining(dtoNew.getProductId());
+        Integer remaining = inventory.getRemaining() - (dtoNew.getCount() - entityOld.getCount());
+        if (remaining < 0) throw new DataException("재고가 충분하지 않습니다.");
+        updateRemaining(dtoNew.getProductId(), new InventoryUpsertDto(remaining));
+        OrderEntity entity = modelMapper.map(dtoNew, OrderEntity.class);
+        entity.setId(entityOld.getId());
+        ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
+        if (!history.getId().equals(entityOld.getProductHistoryId())) throw new ServiceException("상품 정보가 변경되었습니다. 취소 후 재주문 부탁드립니다.");
+        entity.setProductHistoryId(entityOld.getProductHistoryId());
+        entity = orderRepository.save(entity);
+        OrderDto result = modelMapper.map(entity, OrderDto.class);
+        result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
+        return result;
     }
 
     public void deleteOrder(OrderEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        updateRemaining(entity.getProductId(), new InventoryUpsertDto(-entity.getCount()));
         orderRepository.delete(entity);
     }
 
-    private boolean isEnoughRemaining(String id, Integer count) throws Exception {
-        InventoryDto result = getRemaining(id);
-        return result.getRemaining() >= count ? true : false;
+    private boolean isEnoughRemaining(String productId, Integer count) throws Exception {
+        InventoryDto result = getRemaining(productId);
+        return result.getRemaining() >= count;
     }
 
-    private InventoryDto getRemaining(String id) throws Exception {
-        Map<String, Object> queryParamMap = Map.of(
-                "id", id
-        );
-
-        OnDemandResponseDto result = onDemandService.demandToServerByGet("/inventory/" + id, queryParamMap);
-        return (InventoryDto) result.getResponseBody();
+    private InventoryDto getRemaining(String productId) throws Exception {
+        OnDemandResponseDto response = onDemandService.demandToServerByGet("/inventory/" + productId, null);
+        return jacksonMapper.mapToClass((Map) response.getResults(), InventoryDto.class);
     }
 
-    private InventoryDto updateRemaining(String id, InventoryUpsertDto request) throws Exception {
-        Map<String, Object> queryParamMap = Map.of(
-                "id", id
-        );
-        OnDemandResponseDto result = onDemandService.demandToServerByPut("/inventory/" + id, queryParamMap, request);
-        return (InventoryDto) result.getResponseBody();
+    private InventoryDto updateRemaining(String productId, InventoryUpsertDto request) throws Exception {
+        OnDemandResponseDto response = onDemandService.demandToServerByPut("/inventory/" + productId, null, request);
+        return jacksonMapper.mapToClass((Map) response.getResults(), InventoryDto.class);
     }
 
-    private OrderDto getOrder(String id) {
-        return null;
+    private ProductHistoryDto getProductHistory(String productId) throws Exception {
+        OnDemandResponseDto response = onDemandService.demandToServerByGet("/product_history/" + productId, null);
+        return jacksonMapper.mapToClass((Map) response.getResults(), ProductHistoryDto.class);
     }
 
-    private OrderDto getOrders() {
-        return null;
+    private ProductHistoryDto getRecentProductHistory(String productId) throws Exception {
+        OnDemandResponseDto response = onDemandService.demandToServerByGet("/product_history/recent_history/" + productId, null);
+        return jacksonMapper.mapToClass((Map) response.getResults(), ProductHistoryDto.class);
+    }
+
+    private ProductDto getProduct(String productId) throws Exception {
+        OnDemandResponseDto response = onDemandService.demandToServerByGet("/product/" + productId, null);
+        return jacksonMapper.mapToClass((Map) response.getResults(), ProductDto.class);
     }
 
 }

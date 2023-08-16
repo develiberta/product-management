@@ -1,10 +1,10 @@
 package com.project.order.service;
 
 import com.project.lib.constant.CommonConstant;
+import com.project.lib.dto.OnDemandResponseDto;
 import com.project.lib.service.BaseService;
 import com.project.lib.utils.HTTPUtils;
 import com.project.order.config.OrderAppConfig;
-import com.project.order.dto.OnDemandResponseDto;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.http.HttpResponse;

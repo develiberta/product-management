@@ -1,4 +1,4 @@
-package com.project.product.type;
+package com.project.lib.type;
 
 public enum Origin {
     USA,

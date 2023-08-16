@@ -1,6 +1,6 @@
-package com.project.product.dto;
+package com.project.lib.dto;
 
-import com.project.product.type.Origin;
+import com.project.lib.type.Origin;
 import lombok.Data;
 import lombok.ToString;
 
@@ -24,6 +24,4 @@ public class ProductSuperDto {
     private String image;
 
     private String description;
-
-    private Integer remaining;
 }

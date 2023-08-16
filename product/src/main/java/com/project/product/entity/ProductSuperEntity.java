@@ -1,6 +1,6 @@
 package com.project.product.entity;
 
-import com.project.product.type.Origin;
+import com.project.lib.type.Origin;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 

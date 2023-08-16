@@ -7,4 +7,15 @@ import lombok.ToString;
 @ToString
 public class InventoryUpsertDto {
     private Integer remaining;
+
+    public InventoryUpsertDto() {
+
+    }
+    public InventoryUpsertDto(Integer remaining) {
+        this.setRemaining(remaining);
+    }
+
+//    public void plusRemaining(Integer delta) {
+//        this.setRemaining(remaining + delta);
+//    }
 }

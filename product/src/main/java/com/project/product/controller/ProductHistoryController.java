@@ -1,10 +1,9 @@
 package com.project.product.controller;
 
+import com.project.lib.dto.ProductDto;
+import com.project.lib.dto.ProductHistoryDto;
 import com.project.lib.response.ListResponse;
 import com.project.lib.response.ObjectResponse;
-import com.project.product.dto.ProductDto;
-import com.project.product.dto.ProductHistoryDto;
-import com.project.product.dto.ProductSuperDto;
 import com.project.product.entity.ProductEntity;
 import com.project.product.entity.ProductHistoryEntity;
 import com.project.product.service.ProductHistoryService;
@@ -24,16 +23,24 @@ public class ProductHistoryController {
     ProductHistoryService producthistoryService;
 
     @ApiOperation(value="상품 이력 조회")
+    @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ObjectResponse<ProductHistoryDto>> getProductHistories(
+            @PathVariable("id") ProductHistoryEntity item
+    ) throws Exception {
+        return ResponseEntity.ok().body(new ObjectResponse<>(producthistoryService.getProductHistory(item)));
+    }
+
+    @ApiOperation(value="상품 코드로 이력 조회")
     @GetMapping(value="/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ListResponse<ProductHistoryDto>> getProductHistories(
+    public ResponseEntity<ListResponse<ProductHistoryDto>> getProductHistoriesByProduct(
             @PathVariable("id") ProductEntity item
     ) throws Exception {
         return ResponseEntity.ok().body(new ListResponse<>(producthistoryService.getProductHistoriesByProduct(item)));
     }
 
-    @ApiOperation(value="상품 정보 조회")
+    @ApiOperation(value="상품 이력으로 상품 정보 조회")
     @GetMapping(value="/history/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<ProductDto>> getProduct(
+    public ResponseEntity<ObjectResponse<ProductDto>> getProductByProductHistory(
             @PathVariable("id") ProductHistoryEntity item
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(producthistoryService.getProductByProductHistory(item)));

@@ -1,10 +1,12 @@
 package com.project.order.controller;
 
+import com.project.lib.dto.OrderDto;
+import com.project.lib.dto.OrderUpsertDto;
+import com.project.lib.response.ListResponse;
 import com.project.lib.response.ObjectResponse;
 import com.project.lib.response.PageResponse;
+import com.project.order.dto.OrderConditionalDto;
 import com.project.order.dto.OrderConditionalPageDto;
-import com.project.order.dto.OrderDto;
-import com.project.order.dto.OrderUpsertDto;
 import com.project.order.entity.OrderEntity;
 import com.project.order.service.OrderService;
 import io.swagger.annotations.Api;
@@ -32,10 +34,10 @@ public class OrderController {
 
     @ApiOperation(value="주문 목록 조회")
     @GetMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<OrderDto>> page(
-            @ModelAttribute OrderConditionalPageDto condition
+    public ResponseEntity<ListResponse<OrderDto>> page(
+            @ModelAttribute OrderConditionalDto condition
     ) throws Exception {
-        return ResponseEntity.ok().body(new PageResponse<>(orderService.getOrders(condition)));
+        return ResponseEntity.ok().body(new ListResponse<>(orderService.getOrders(condition)));
     }
     
     @ApiOperation(value="주문 생성")
