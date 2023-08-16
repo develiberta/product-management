@@ -23,18 +23,12 @@ public class InventoryService extends BaseService {
     ProductHistoryRepository productHistoryRepository;
 
     public InventoryDto getRemainingByProduct(InventoryEntity entity) {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         return modelMapper.map(entity, InventoryDto.class);
     }
 
-    public InventoryDto getRemainingByProductHistory(ProductHistoryEntity entity) {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        InventoryDto result  = modelMapper.map(inventoryRepository.findByProductId(entity.getProductId()), InventoryDto.class);
-        return result;
-    }
-
     public InventoryDto updateRemaining(InventoryEntity entityOld, InventoryUpsertDto dtoNew) {
-        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         InventoryEntity entity = inventoryRepository.findById(entityOld.getId()).orElse(null);
         entity.setRemaining(dtoNew.getRemaining());
         InventoryDto result = modelMapper.map(inventoryRepository.save(entityOld), InventoryDto.class);

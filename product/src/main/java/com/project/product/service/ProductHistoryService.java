@@ -29,16 +29,16 @@ public class ProductHistoryService extends BaseService {
     InventoryRepository inventoryRepository;
 
     public ProductHistoryDto getProductHistory(ProductHistoryEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품 이력이 존재하지 않습니다."));
         ProductHistoryEntity history = productHistoryRepository.findById(entity.getId()).orElse(null);
         ProductHistoryDto result = modelMapper.map(history, ProductHistoryDto.class);
         return result;
     }
 
     public ProductDto getProductByProductHistory(ProductHistoryEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품 이력이 존재하지 않습니다."));
         ProductEntity product = productRepository.findById(entity.getProductId()).orElse(null);
-        Optional.ofNullable(product).orElseThrow(() -> new DataException("상품 정보가 존재하지 않습니다."));
+        Optional.ofNullable(product).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductDto result = modelMapper.map(product, ProductDto.class);
         result.setRemaining(inventoryRepository.findByProductId(result.getId()).getRemaining());
         return result;
@@ -52,7 +52,7 @@ public class ProductHistoryService extends BaseService {
     }
 
     public ProductHistoryDto getRecentProductHistory(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductHistoryEntity history = productHistoryRepository.findTopByProductIdOrderByCreatedTimeDesc(entity.getId());
         ProductHistoryDto result = modelMapper.map(history, ProductHistoryDto.class);
         return result;

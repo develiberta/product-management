@@ -34,7 +34,7 @@ public class ProductService extends BaseService {
     InventoryRepository inventoryRepository;
 
     public ProductDto getProduct(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductDto result = modelMapper.map(entity, ProductDto.class);
         InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
         result.setRemaining(inventory.getRemaining());
@@ -70,7 +70,7 @@ public class ProductService extends BaseService {
 
     @Transactional
     public ProductDto updateProduct(ProductEntity entityOld, ProductUpsertDto dtoNew) throws Exception {
-        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
         entity.setId(entityOld.getId());
         entity.setCreatedTime(entityOld.getCreatedTime());
@@ -88,7 +88,7 @@ public class ProductService extends BaseService {
 
     @Transactional
     public void deleteProduct(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
 //        inventoryRepository.deleteById(entity.getId());
         productRepository.delete(entity);
         ProductHistoryEntity history = modelMapper.map(entity, ProductHistoryEntity.class);

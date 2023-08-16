@@ -28,7 +28,7 @@ public class InventoryController {
         return ResponseEntity.ok().body(new ObjectResponse<>(inventoryService.getRemainingByProduct(item)));
     }
 
-//    @ApiOperation(value="재고 조회 (제품 이력 코드로 검색)")
+//    @ApiOperation(value="재고 조회 (상품 이력 코드로 검색)")
 //    @GetMapping(value="/{id}/by_product_history", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<ObjectResponse<InventoryDto>> getRemainingByProductHistory(
 //            @PathVariable("id") ProductHistoryEntity item
