@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySources;
 
 @Configuration
 @PropertySources({
-	@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound=true),
+	@PropertySource(value="classpath:application.properties", ignoreResourceNotFound=true),
 })
 @Data
 public class OrderAppConfig {

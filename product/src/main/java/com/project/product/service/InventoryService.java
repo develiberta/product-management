@@ -22,15 +22,16 @@ public class InventoryService extends BaseService {
     @Autowired
     ProductHistoryRepository productHistoryRepository;
 
-    public InventoryDto getRemainingByProduct(InventoryEntity entity) {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+    public InventoryDto getRemainingByProduct(String id) {
+        Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        InventoryEntity entity = inventoryRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         return modelMapper.map(entity, InventoryDto.class);
     }
 
-    public InventoryDto updateRemaining(InventoryEntity entityOld, InventoryUpsertDto dtoNew) {
-        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
-        InventoryEntity entity = inventoryRepository.findById(entityOld.getId()).orElse(null);
-        entity.setRemaining(dtoNew.getRemaining());
+    public InventoryDto updateRemaining(String id, InventoryUpsertDto dtoNew) {
+        Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        InventoryEntity entityOld = inventoryRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        entityOld.setRemaining(dtoNew.getRemaining());
         InventoryDto result = modelMapper.map(inventoryRepository.save(entityOld), InventoryDto.class);
         return result;
     }

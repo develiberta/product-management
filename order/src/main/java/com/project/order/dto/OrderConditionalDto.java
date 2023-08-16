@@ -16,7 +16,7 @@ import lombok.ToString;
 public class OrderConditionalDto extends SpecCondition<OrderEntity> {
 
     @ApiModelProperty(required = false)
-    @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=OrderEntity.class)
+    @SearchCondition(value="id", condition=SearchType.EQUAL, qualifiedBy=OrderEntity.class)
     private String id;
 
     private Integer count;
@@ -24,7 +24,7 @@ public class OrderConditionalDto extends SpecCondition<OrderEntity> {
     private Integer price;
 
     @ApiModelProperty(required = false)
-    @SearchCondition(value = "productId", condition = SearchType.EQUAL, qualifiedBy=OrderEntity.class)
+    @SearchCondition(value="productId", condition=SearchType.EQUAL, qualifiedBy=OrderEntity.class)
     private String productId;
 
 }

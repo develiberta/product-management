@@ -13,14 +13,14 @@ public class PageCondition<T> extends SpecCondition<T> {
 	public static int START_PAGE_NO = 0;
 	
 	/* */
-	@ApiModelProperty(value = "rows of page", required = true, example = "10")
+	@ApiModelProperty(value="rows of page", required=true, example="10")
 	private int size;
 
-	@ApiModelProperty(value = "page to view", required = true, example = "0")
+	@ApiModelProperty(value="page to view", required=true, example="0")
 	private int page;
 	
 	/* */
-	@ApiModelProperty(required = false)
+	@ApiModelProperty(required=false)
 	private String sort;
 	
 	/* */

@@ -18,17 +18,17 @@ import javax.persistence.Enumerated;
 @ToString
 public class ProductConditionalDto extends SpecCondition<ProductEntity> {
 
-    @ApiModelProperty(required = false)
-    @SearchCondition(value = "id", condition = SearchType.EQUAL, qualifiedBy=ProductEntity.class)
+    @ApiModelProperty(required=false)
+    @SearchCondition(value="id", condition=SearchType.EQUAL, qualifiedBy=ProductEntity.class)
     private String id;
 
-    @ApiModelProperty(required = false)
-    @SearchCondition(value = "name", condition = SearchType.LIKE, qualifiedBy=ProductEntity.class)
+    @ApiModelProperty(required=false)
+    @SearchCondition(value="name", condition=SearchType.LIKE, qualifiedBy=ProductEntity.class)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty(required = false)
-    @SearchCondition(value = "origin", condition = SearchType.EQUAL, qualifiedBy=ProductEntity.class)
+    @ApiModelProperty(required=false)
+    @SearchCondition(value="origin", condition=SearchType.EQUAL, qualifiedBy=ProductEntity.class)
     private Origin origin;
 
     private Integer price;
@@ -37,8 +37,8 @@ public class ProductConditionalDto extends SpecCondition<ProductEntity> {
 
     private String image;
 
-    @ApiModelProperty(required = false)
-    @SearchCondition(value = "description", condition = SearchType.LIKE, qualifiedBy=ProductEntity.class)
+    @ApiModelProperty(required=false)
+    @SearchCondition(value="description", condition=SearchType.LIKE, qualifiedBy=ProductEntity.class)
     private String description;
 
 }

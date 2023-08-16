@@ -66,10 +66,12 @@ public class OnDemandService extends BaseService {
         try {
             String productServer = orderAppConfig.getProductServer() + urlSuffix;
 
-            logger.info(productServer);
+            logger.info("Product 서버를 호출합니다. (POST)");
+            logger.info(" - serverUrl={})", productServer);
 
             byte[] content = jacksonMapper.objectToJsonString(requestBody).getBytes(CommonConstant.UTF8);
-            logger.info(String.valueOf(content));
+
+            logger.info(" - content={}", content);
 
             HttpJsonResponse mapResponse = new HttpJsonResponse();
 
@@ -94,17 +96,16 @@ public class OnDemandService extends BaseService {
         return response;
     }
 
-    public OnDemandResponseDto demandToServerByGet(String urlSuffix, Map queryParamMap) throws Exception {
+    public OnDemandResponseDto demandToServerByGet(String urlSuffix, Map queryParam) throws Exception {
 
         OnDemandResponseDto response;
 
         try {
             String productServer = orderAppConfig.getProductServer() + urlSuffix;
 
-            logger.info(productServer);
-
-            Map queryParam = jacksonMapper.objectToMap(queryParamMap);
-            logger.info(String.valueOf(queryParam));
+            logger.info("Product 서버를 호출합니다. (GET)");
+            logger.info(" - serverUrl={})", productServer);
+            logger.info(" - queryParam={}", queryParam);
 
             HttpJsonResponse mapResponse = new HttpJsonResponse();
 
@@ -127,24 +128,27 @@ public class OnDemandService extends BaseService {
         return response;
     }
 
-    public OnDemandResponseDto demandToServerByPut(String urlSuffix, Map queryParamMap, Object requestBody) throws Exception {
+    public OnDemandResponseDto demandToServerByPut(String urlSuffix, Map queryParam, Object requestBody) throws Exception {
 
         OnDemandResponseDto response;
 
         try {
             String productServer = orderAppConfig.getProductServer() + urlSuffix;
 
-            logger.info(productServer);
+            logger.info("Product 서버를 호출합니다. (PUT)");
+            logger.info(" - serverUrl={})", productServer);
 
             byte[] content = jacksonMapper.objectToJsonString(requestBody).getBytes(CommonConstant.UTF8);
-            logger.info(String.valueOf(content));
+
+            logger.info(" - queryParam={}", queryParam);
+            logger.info(" - content={}", content);
 
             HttpJsonResponse mapResponse = new HttpJsonResponse();
 
             HTTPUtils.put(productServer,
                     content,
                     CommonConstant.UTF8,
-                    queryParamMap,
+                    queryParam,
                     "application/json",
                     null,
                     HTTPUtils.DEFAULT_TIMEOUT,

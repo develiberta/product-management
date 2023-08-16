@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(
-        name = "tb_inventory",
-        indexes = {
+        name="tb_inventory",
+        indexes={
                 @Index(name = "idx_inventory_01", columnList = "remaining")
         })
 public class InventoryEntity implements Serializable {

@@ -33,10 +33,11 @@ public class ProductService extends BaseService {
     @Autowired
     InventoryRepository inventoryRepository;
 
-    public ProductDto getProduct(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+    public ProductDto getProduct(String id) throws Exception {
+        Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        ProductEntity entity = productRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductDto result = modelMapper.map(entity, ProductDto.class);
-        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
+        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElseThrow(() -> new DataException("상품의 재고가 정상적으로 입력되지 않았습니다."));
         result.setRemaining(inventory.getRemaining());
         return result;
     }
@@ -46,7 +47,11 @@ public class ProductService extends BaseService {
         Page<ProductDto> results = productRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, ProductDto.class));
         for (ProductDto result : results) {
             InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
-            result.setRemaining(inventory.getRemaining());
+            if (inventory == null) {
+                logger.warn("tb_inventory에 상품의 재고가 정상적으로 입력되지 않았습니다. (id={})", result.getId());
+            } else {
+                result.setRemaining(inventory.getRemaining());
+            }
         }
         return results;
     }
@@ -69,8 +74,9 @@ public class ProductService extends BaseService {
     }
 
     @Transactional
-    public ProductDto updateProduct(ProductEntity entityOld, ProductUpsertDto dtoNew) throws Exception {
-        Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+    public ProductDto updateProduct(String id, ProductUpsertDto dtoNew) throws Exception {
+        Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        ProductEntity entityOld = productRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
         entity.setId(entityOld.getId());
         entity.setCreatedTime(entityOld.getCreatedTime());
@@ -81,20 +87,23 @@ public class ProductService extends BaseService {
         history.setAction(Action.updated);
         productHistoryRepository.save(history);
         ProductDto result = modelMapper.map(entity, ProductDto.class);
-        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
+        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElseThrow(() -> new DataException("상품의 재고가 정상적으로 입력되지 않았습니다."));
         result.setRemaining(inventory.getRemaining());
         return result;
     }
 
     @Transactional
-    public void deleteProduct(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+    public String deleteProduct(String id) throws Exception {
+        Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        ProductEntity entity = productRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
 //        inventoryRepository.deleteById(entity.getId());
+        String entityId = entity.getId();
         productRepository.delete(entity);
         ProductHistoryEntity history = modelMapper.map(entity, ProductHistoryEntity.class);
         history.setProductId(entity.getId());
         history.setAction(Action.deleted);
         productHistoryRepository.save(history);
+        return entityId;
     }
 
 }
