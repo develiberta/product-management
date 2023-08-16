@@ -59,7 +59,6 @@ public class ProductService extends BaseService {
         inventory.setProduct(entity);
         inventory.setRemaining(0);
         inventory = inventoryRepository.save(inventory);
-        entity.setInventory(inventory);
         ProductDto result = modelMapper.map(entity, ProductDto.class);
         result.setRemaining(inventory.getRemaining());
         return result;
@@ -70,6 +69,7 @@ public class ProductService extends BaseService {
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
         entity.setId(entityOld.getId());
         entity.setCreatedTime(entityOld.getCreatedTime());
+        entity.setInventory(entityOld.getInventory());
         entity = productRepository.save(entity);
         ProductHistoryEntity history = modelMapper.map(dtoNew, ProductHistoryEntity.class);
         history.setProductId(entity.getId());
