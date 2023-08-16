@@ -4,6 +4,7 @@ import com.project.lib.response.ObjectResponse;
 import com.project.lib.response.PageResponse;
 import com.project.order.dto.OrderConditionalPageDto;
 import com.project.order.dto.OrderDto;
+import com.project.order.dto.OrderUpsertDto;
 import com.project.order.entity.OrderEntity;
 import com.project.order.service.OrderService;
 import io.swagger.annotations.Api;
@@ -39,17 +40,17 @@ public class OrderController {
     
     @ApiOperation(value="주문 생성")
     @PostMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<OrderEntity>> create(
-            @RequestBody OrderDto dtoNew
+    public ResponseEntity<ObjectResponse<OrderDto>> create(
+            @RequestBody OrderUpsertDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(orderService.orderProduct(dtoNew)));
     }
 
     @ApiOperation(value="주문 갱신")
     @PutMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectResponse<OrderEntity>> update(
+    public ResponseEntity<ObjectResponse<OrderDto>> update(
             @PathVariable("id") OrderEntity entityOld,
-            @RequestBody OrderDto dtoNew
+            @RequestBody OrderUpsertDto dtoNew
     ) throws Exception {
         return ResponseEntity.ok().body(new ObjectResponse<>(orderService.changeOrder(entityOld, dtoNew)));
     }
@@ -60,7 +61,7 @@ public class OrderController {
             @PathVariable("id") OrderEntity entity
     ) throws Exception {
         orderService.deleteOrder(entity);
-        return ResponseEntity.ok().body(new ObjectResponse<>(entity.getId().toString()));
+        return ResponseEntity.ok().body(new ObjectResponse<>(entity.getId()));
     }
 
 }

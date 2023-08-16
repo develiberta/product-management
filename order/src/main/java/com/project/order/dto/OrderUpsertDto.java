@@ -5,10 +5,8 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class OrderDto {
+public class OrderUpsertDto {
     private Integer count;
 
     private String productId;
-
-    private String productHistoryId;
 }
