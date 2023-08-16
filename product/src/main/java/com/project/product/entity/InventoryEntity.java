@@ -1,6 +1,7 @@
 package com.project.product.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,6 +32,7 @@ public class InventoryEntity implements Serializable {
     private ProductEntity product;
 
     @Column(name="remaining")
+    @ColumnDefault("0")
     private Integer remaining;
 
 }

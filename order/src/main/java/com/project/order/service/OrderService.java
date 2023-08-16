@@ -52,6 +52,8 @@ public class OrderService extends BaseService {
 
     @Transactional
     public OrderDto orderProduct(OrderInsertDto dto) throws Exception {
+        dto.checkValid();
+        if (Integer.signum(dto.getCount()) <= 0) throw new DataException("주문 수량은 양수만 가능합니다.");
         InventoryDto inventory = getRemaining(dto.getProductId());
         Integer remaining = inventory.getRemaining() - dto.getCount();
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
@@ -68,7 +70,9 @@ public class OrderService extends BaseService {
     @Transactional
     public OrderDto changeOrder(String id, OrderUpdateDto dtoNew) throws Exception {
         Optional.ofNullable(id).orElseThrow(() -> new DataException("주문이 존재하지 않습니다."));
+        dtoNew.checkValid();
         OrderEntity entityOld = orderRepository.findById(id).orElseThrow(() -> new DataException("주문이 존재하지 않습니다."));
+        if (Integer.signum(dtoNew.getCount()) <= 0) throw new DataException("주문 수량은 양수만 가능합니다.");
         InventoryDto inventory = getRemaining(entityOld.getProductId());
         Integer remaining = inventory.getRemaining() - (dtoNew.getCount() - entityOld.getCount());
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
@@ -110,8 +114,9 @@ public class OrderService extends BaseService {
         return result;
     }
 
-    private InventoryDto updateRemaining(String productId, InventoryUpsertDto request) throws Exception {
-        OnDemandResponseDto response = onDemandService.demandToServerByPut("/inventory/" + productId, null, request);
+    private InventoryDto updateRemaining(String productId, InventoryUpsertDto dtoNew) throws Exception {
+        dtoNew.checkValid();
+        OnDemandResponseDto response = onDemandService.demandToServerByPut("/inventory/" + productId, null, dtoNew);
         InventoryDto result = jacksonMapper.mapToClass((Map) response.getResults(), InventoryDto.class);
         Optional.ofNullable(result).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         return result;

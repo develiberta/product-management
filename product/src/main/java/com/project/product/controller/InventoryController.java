@@ -24,11 +24,11 @@ public class InventoryController {
 
     @ApiOperation(value="재고 조회")
     @GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getRemainingByProduct(
+    public ResponseEntity getRemaining(
             @PathVariable("id") String id
     ) {
         try {
-            return ResponseEntity.ok().body(new ObjectResponse<>(inventoryService.getRemainingByProduct(id)));
+            return ResponseEntity.ok().body(new ObjectResponse<>(inventoryService.getRemaining(id)));
         } catch (Exception e) {
             return ResponseEntity.ok().body(new ErrorResponse(HttpStatus.BAD_REQUEST, e));
         }

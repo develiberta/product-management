@@ -4,6 +4,7 @@ import com.project.lib.dto.ProductDto;
 import com.project.lib.dto.ProductUpsertDto;
 import com.project.lib.exception.DataException;
 import com.project.lib.service.BaseService;
+import com.project.lib.type.Origin;
 import com.project.product.dto.ProductConditionalPageDto;
 import com.project.product.entity.InventoryEntity;
 import com.project.product.entity.ProductEntity;
@@ -58,7 +59,9 @@ public class ProductService extends BaseService {
 
     @Transactional
     public ProductDto addProduct(ProductUpsertDto dto) throws Exception {
+        dto.checkValid();
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
+        if (dto.getOrigin() instanceof Origin == false) throw new DataException("원산지 정보를 확인해주세요.");
         /* [확인 필요] createdTime, updatedTime 이 db에서는 정상적으로 보이지만 entity에서는 null임을 확인 */
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
         history.setProductId(entity.getId());
@@ -76,7 +79,9 @@ public class ProductService extends BaseService {
     @Transactional
     public ProductDto updateProduct(String id, ProductUpsertDto dtoNew) throws Exception {
         Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        dtoNew.checkValid();
         ProductEntity entityOld = productRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
+        if (dtoNew.getOrigin() instanceof Origin == false) throw new DataException("원산지 정보를 확인해주세요.");
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
         entity.setId(entityOld.getId());
         entity.setCreatedTime(entityOld.getCreatedTime());

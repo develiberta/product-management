@@ -1,6 +1,7 @@
 package com.project.order.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,6 +35,7 @@ public class OrderEntity implements Serializable {
     private String id;
 
     @Column(name="count")
+    @ColumnDefault("0")
     private Integer count;
 
     /* Product Aplication Database Schema가 달라서 FK 불가 */
