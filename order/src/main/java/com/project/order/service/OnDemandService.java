@@ -4,6 +4,7 @@ import com.project.lib.constant.CommonConstant;
 import com.project.lib.dto.OnDemandResponseDto;
 import com.project.lib.service.BaseService;
 import com.project.lib.utils.HTTPUtils;
+import com.project.lib.utils.JacksonMapper;
 import com.project.order.config.OrderAppConfig;
 import lombok.Data;
 import lombok.ToString;
@@ -71,7 +72,7 @@ public class OnDemandService extends BaseService {
 
             byte[] content = jacksonMapper.objectToJsonString(requestBody).getBytes(CommonConstant.UTF8);
 
-            logger.info(" - content={}", content);
+            logger.info(" - content={}", content.toString());
 
             HttpJsonResponse mapResponse = new HttpJsonResponse();
 
@@ -141,7 +142,7 @@ public class OnDemandService extends BaseService {
             byte[] content = jacksonMapper.objectToJsonString(requestBody).getBytes(CommonConstant.UTF8);
 
             logger.info(" - queryParam={}", queryParam);
-            logger.info(" - content={}", content);
+            logger.info(" - content={}", content.toString());
 
             HttpJsonResponse mapResponse = new HttpJsonResponse();
 
