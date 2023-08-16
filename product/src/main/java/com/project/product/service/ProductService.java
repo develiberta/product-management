@@ -18,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -53,6 +54,7 @@ public class ProductService extends BaseService {
     @Transactional
     public ProductDto addProduct(ProductUpsertDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
+        /* [확인 필요] createdTime, updatedTime 이 db에서는 정상적으로 보이지만 entity에서는 null임을 확인 */
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
         history.setProductId(entity.getId());
         history.setAction(Action.created);

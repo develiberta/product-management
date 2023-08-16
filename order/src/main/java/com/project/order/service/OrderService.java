@@ -9,7 +9,6 @@ import com.project.order.entity.OrderEntity;
 import com.project.order.repository.OrderRepository;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,7 +83,9 @@ public class OrderService extends BaseService {
     @Transactional
     public void deleteOrder(OrderEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        updateRemaining(entity.getProductId(), new InventoryUpsertDto(-entity.getCount()));
+        InventoryDto inventory = getRemaining(entity.getProductId());
+        Integer remaining = inventory.getRemaining() + entity.getCount();
+        updateRemaining(entity.getProductId(), new InventoryUpsertDto(remaining));
         orderRepository.delete(entity);
     }
 
@@ -109,7 +110,7 @@ public class OrderService extends BaseService {
     }
 
     private ProductHistoryDto getRecentProductHistory(String productId) throws Exception {
-        OnDemandResponseDto response = onDemandService.demandToServerByGet("/product_history/recent_history/" + productId, null);
+        OnDemandResponseDto response = onDemandService.demandToServerByGet("/product_history/product/" + productId + "/recent_history", null);
         return jacksonMapper.mapToClass((Map) response.getResults(), ProductHistoryDto.class);
     }
 

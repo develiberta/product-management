@@ -38,15 +38,15 @@ public class ProductHistoryService extends BaseService {
     public ProductDto getProductByProductHistory(ProductHistoryEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         ProductEntity product = productRepository.findById(entity.getProductId()).orElse(null);
+        Optional.ofNullable(product).orElseThrow(() -> new DataException("상품 정보가 존재하지 않습니다."));
         ProductDto result = modelMapper.map(product, ProductDto.class);
         result.setRemaining(inventoryRepository.findByProductId(result.getId()).getRemaining());
         return result;
     }
 
-    public List<ProductHistoryDto> getProductHistoriesByProduct(ProductEntity entity) throws Exception {
-        Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
+    public List<ProductHistoryDto> getProductHistoriesByProduct(String id) throws Exception {
         return modelMapper.map(
-                productHistoryRepository.findByProductId(entity.getId()),
+                productHistoryRepository.findByProductId(id),
                 new TypeToken<List<ProductHistoryDto>>(){}.getType()
         );
     }

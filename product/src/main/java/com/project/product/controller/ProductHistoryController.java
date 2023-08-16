@@ -33,12 +33,12 @@ public class ProductHistoryController {
     @ApiOperation(value="상품 코드로 이력 조회")
     @GetMapping(value="/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ListResponse<ProductHistoryDto>> getProductHistoriesByProduct(
-            @PathVariable("id") ProductEntity item
+            @PathVariable("id") String id
     ) throws Exception {
-        return ResponseEntity.ok().body(new ListResponse<>(producthistoryService.getProductHistoriesByProduct(item)));
+        return ResponseEntity.ok().body(new ListResponse<>(producthistoryService.getProductHistoriesByProduct(id)));
     }
 
-    @ApiOperation(value="상품 이력으로 상품 정보 조회")
+    @ApiOperation(value="상품 이력 코드로 상품 조회")
     @GetMapping(value="/history/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectResponse<ProductDto>> getProductByProductHistory(
             @PathVariable("id") ProductHistoryEntity item
@@ -46,8 +46,8 @@ public class ProductHistoryController {
         return ResponseEntity.ok().body(new ObjectResponse<>(producthistoryService.getProductByProductHistory(item)));
     }
 
-    @ApiOperation(value="상품 최신 이력 조회")
-    @GetMapping(value="/recent_history/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="상품 코드로 상품 최신 이력 조회")
+    @GetMapping(value="/product/{id}/recent_history", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectResponse<ProductHistoryDto>> getRecentProductHistory(
             @PathVariable("id") ProductEntity item
     ) throws Exception {
