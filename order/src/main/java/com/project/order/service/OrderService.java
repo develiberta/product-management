@@ -74,6 +74,7 @@ public class OrderService extends BaseService {
         ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
         if (!history.getId().equals(entityOld.getProductHistoryId())) throw new ServiceException("상품 정보가 변경되었습니다. 취소 후 재주문 부탁드립니다.");
         entity.setProductHistoryId(entityOld.getProductHistoryId());
+        entity.setCreatedTime(entityOld.getCreatedTime());
         entity = orderRepository.save(entity);
         OrderDto result = modelMapper.map(entity, OrderDto.class);
         result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
