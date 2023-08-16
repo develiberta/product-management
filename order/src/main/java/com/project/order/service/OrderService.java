@@ -48,7 +48,7 @@ public class OrderService extends BaseService {
     }
 
     @Transactional
-    public OrderDto orderProduct(OrderUpsertDto dto) throws Exception {
+    public OrderDto orderProduct(OrderInsertDto dto) throws Exception {
         InventoryDto inventory = getRemaining(dto.getProductId());
         Integer remaining = inventory.getRemaining() - dto.getCount();
         if (remaining < 0) throw new DataException("재고가 충분하지 않습니다.");
@@ -63,14 +63,15 @@ public class OrderService extends BaseService {
     }
 
     @Transactional
-    public OrderDto changeOrder(OrderEntity entityOld, OrderUpsertDto dtoNew) throws Exception {
+    public OrderDto changeOrder(OrderEntity entityOld, OrderUpdateDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
-        InventoryDto inventory = getRemaining(dtoNew.getProductId());
+        InventoryDto inventory = getRemaining(entityOld.getProductId());
         Integer remaining = inventory.getRemaining() - (dtoNew.getCount() - entityOld.getCount());
         if (remaining < 0) throw new DataException("재고가 충분하지 않습니다.");
-        updateRemaining(dtoNew.getProductId(), new InventoryUpsertDto(remaining));
+        updateRemaining(entityOld.getProductId(), new InventoryUpsertDto(remaining));
         OrderEntity entity = modelMapper.map(dtoNew, OrderEntity.class);
         entity.setId(entityOld.getId());
+        entity.setProductId(entityOld.getProductId());
         ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
         if (!history.getId().equals(entityOld.getProductHistoryId())) throw new ServiceException("상품 정보가 변경되었습니다. 취소 후 재주문 부탁드립니다.");
         entity.setProductHistoryId(entityOld.getProductHistoryId());

@@ -5,8 +5,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class OrderUpsertDto {
+public class OrderUpdateDto {
     private Integer count;
-
-    private String productId;
 }
