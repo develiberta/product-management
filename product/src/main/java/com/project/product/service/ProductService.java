@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -49,6 +50,7 @@ public class ProductService extends BaseService {
         return results;
     }
 
+    @Transactional
     public ProductDto addProduct(ProductUpsertDto dto) throws Exception {
         ProductEntity entity = productRepository.save(modelMapper.map(dto, ProductEntity.class));
         ProductHistoryEntity history = modelMapper.map(dto, ProductHistoryEntity.class);
@@ -64,6 +66,7 @@ public class ProductService extends BaseService {
         return result;
     }
 
+    @Transactional
     public ProductDto updateProduct(ProductEntity entityOld, ProductUpsertDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
@@ -81,6 +84,7 @@ public class ProductService extends BaseService {
         return result;
     }
 
+    @Transactional
     public void deleteProduct(ProductEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
 //        inventoryRepository.deleteById(entity.getId());

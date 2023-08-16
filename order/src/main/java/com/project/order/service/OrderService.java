@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class OrderService extends BaseService {
         return results;
     }
 
+    @Transactional
     public OrderDto orderProduct(OrderUpsertDto dto) throws Exception {
         InventoryDto inventory = getRemaining(dto.getProductId());
         Integer remaining = inventory.getRemaining() - dto.getCount();
@@ -61,6 +63,7 @@ public class OrderService extends BaseService {
         return result;
     }
 
+    @Transactional
     public OrderDto changeOrder(OrderEntity entityOld, OrderUpsertDto dtoNew) throws Exception {
         Optional.ofNullable(entityOld).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         InventoryDto inventory = getRemaining(dtoNew.getProductId());
@@ -78,6 +81,7 @@ public class OrderService extends BaseService {
         return result;
     }
 
+    @Transactional
     public void deleteOrder(OrderEntity entity) throws Exception {
         Optional.ofNullable(entity).orElseThrow(() -> new DataException("입력 자료가 존재하지 않습니다."));
         updateRemaining(entity.getProductId(), new InventoryUpsertDto(-entity.getCount()));
