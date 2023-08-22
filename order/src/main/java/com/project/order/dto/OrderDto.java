@@ -1,4 +1,4 @@
-package com.project.lib.dto;
+package com.project.order.dto;
 
 import com.project.lib.type.Origin;
 import lombok.Data;

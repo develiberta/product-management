@@ -5,6 +5,9 @@ import com.project.lib.exception.DataException;
 import com.project.lib.exception.ServiceException;
 import com.project.lib.service.BaseService;
 import com.project.order.dto.OrderConditionalDto;
+import com.project.order.dto.OrderDto;
+import com.project.order.dto.OrderInsertDto;
+import com.project.order.dto.OrderUpdateDto;
 import com.project.order.entity.OrderEntity;
 import com.project.order.repository.OrderRepository;
 import org.modelmapper.TypeToken;
@@ -57,7 +60,7 @@ public class OrderService extends BaseService {
         Integer remaining = inventory.getRemaining() - dto.getCount();
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
         updateRemaining(dto.getProductId(), new InventoryUpsertDto(remaining));
-        OrderEntity entity = modelMapper.map(dto, OrderEntity.class);
+        OrderEntity entity = dto.createBy(modelMapper);
         ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
         entity.setProductHistoryId(history.getId());
         entity = orderRepository.save(entity);
@@ -74,15 +77,10 @@ public class OrderService extends BaseService {
         InventoryDto inventory = getRemaining(entityOld.getProductId());
         Integer remaining = inventory.getRemaining() - (dtoNew.getCount() - entityOld.getCount());
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
-        updateRemaining(entityOld.getProductId(), new InventoryUpsertDto(remaining));
-        OrderEntity entity = modelMapper.map(dtoNew, OrderEntity.class);
-        /* 하위 내용은 객체 중심으로 수정 권장 */
-        entity.setId(entityOld.getId());
-        entity.setProductId(entityOld.getProductId());
-        ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
+        ProductHistoryDto history = getRecentProductHistory(entityOld.getProductId());
         if (!history.getId().equals(entityOld.getProductHistoryId())) throw new ServiceException("상품 정보가 변경되었습니다. 취소 후 재주문 부탁드립니다.");
-        entity.setProductHistoryId(entityOld.getProductHistoryId());
-        entity.setCreatedTime(entityOld.getCreatedTime());
+        updateRemaining(entityOld.getProductId(), new InventoryUpsertDto(remaining));
+        OrderEntity entity = dtoNew.updateBy(modelMapper, entityOld);
         entity = orderRepository.save(entity);
         OrderDto result = modelMapper.map(entity, OrderDto.class);
         result.setProductInfo(history.getName(), history.getOrigin(), history.getPrice(), history.getCost(), history.getImage(), history.getDescription());
