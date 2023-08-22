@@ -47,8 +47,8 @@ public class ProductService extends BaseService {
         Specification<ProductEntity> spec = specBuilder.search(condition);
         Page<ProductDto> results = productRepository.findAll(spec, condition.makePageable()).map(item -> modelMapper.map(item, ProductDto.class));
         for (ProductDto result : results) {
-            InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(null);
-            if (inventory == null) {
+            InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(new InventoryEntity());
+            if (inventory.getId() == null) {
                 logger.warn("tb_inventory에 상품의 재고가 정상적으로 입력되지 않았습니다. (id={})", result.getId());
             } else {
                 result.setRemaining(inventory.getRemaining());
@@ -91,8 +91,12 @@ public class ProductService extends BaseService {
         history.setAction(Action.updated);
         productHistoryRepository.save(history);
         ProductDto result = modelMapper.map(entity, ProductDto.class);
-        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElseThrow(() -> new DataException("상품의 재고가 정상적으로 입력되지 않았습니다."));
-        result.setRemaining(inventory.getRemaining());
+        InventoryEntity inventory = inventoryRepository.findById(result.getId()).orElse(new InventoryEntity());
+        if (inventory.getId() == null) {
+            logger.warn("tb_inventory에 상품의 재고가 정상적으로 입력되지 않았습니다. (id={})", result.getId());
+        } else {
+            result.setRemaining(inventory.getRemaining());
+        }
         return result;
     }
 
