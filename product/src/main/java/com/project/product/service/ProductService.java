@@ -81,7 +81,6 @@ public class ProductService extends BaseService {
         Optional.ofNullable(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
         dtoNew.checkValid();
         ProductEntity entityOld = productRepository.findById(id).orElseThrow(() -> new DataException("상품이 존재하지 않습니다."));
-        if (dtoNew.getOrigin() instanceof Origin == false) throw new DataException("원산지 정보를 확인해주세요.");
         ProductEntity entity = modelMapper.map(dtoNew, ProductEntity.class);
         entity.setId(entityOld.getId());
         entity.setCreatedTime(entityOld.getCreatedTime());

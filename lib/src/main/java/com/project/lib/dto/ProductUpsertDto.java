@@ -29,6 +29,7 @@ public class ProductUpsertDto {
     public void checkValid() {
         if (StringUtils.isAllEmpty(this.name)) new DataException("상품 이름은 필수로 입력해야 합니다.");
         Optional.ofNullable(this.origin).orElseThrow(() -> new DataException("원산지는 필수로 입력해야 합니다."));
+        if (this.origin instanceof Origin == false) throw new DataException("원산지 정보를 확인해주세요.");
         Optional.ofNullable(this.price).orElseThrow(() -> new DataException("상품 가격은 필수로 입력해야 합니다."));
         if (Integer.signum(this.price) < 0) throw new DataException("상품 가격은 0 또는 양수만 가능합니다.");
         Optional.ofNullable(this.cost).orElseThrow(() -> new DataException("상품 원가는 필수로 입력해야 합니다."));
