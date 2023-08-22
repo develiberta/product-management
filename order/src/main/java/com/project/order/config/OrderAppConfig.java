@@ -12,6 +12,6 @@ import org.springframework.context.annotation.PropertySources;
 })
 @Data
 public class OrderAppConfig {
-	@Value("${product-management.product.server:'http://localhost:8082'}")
+	@Value("${product-management.product.server:'http://localhost:8081'}")
 	private String productServer;
 }
