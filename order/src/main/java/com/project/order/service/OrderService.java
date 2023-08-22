@@ -53,7 +53,6 @@ public class OrderService extends BaseService {
     @Transactional
     public OrderDto orderProduct(OrderInsertDto dto) throws Exception {
         dto.checkValid();
-        if (Integer.signum(dto.getCount()) <= 0) throw new DataException("주문 수량은 양수만 가능합니다.");
         InventoryDto inventory = getRemaining(dto.getProductId());
         Integer remaining = inventory.getRemaining() - dto.getCount();
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
@@ -72,7 +71,6 @@ public class OrderService extends BaseService {
         Optional.ofNullable(id).orElseThrow(() -> new DataException("주문이 존재하지 않습니다."));
         dtoNew.checkValid();
         OrderEntity entityOld = orderRepository.findById(id).orElseThrow(() -> new DataException("주문이 존재하지 않습니다."));
-        if (Integer.signum(dtoNew.getCount()) <= 0) throw new DataException("주문 수량은 양수만 가능합니다.");
         InventoryDto inventory = getRemaining(entityOld.getProductId());
         Integer remaining = inventory.getRemaining() - (dtoNew.getCount() - entityOld.getCount());
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
