@@ -78,6 +78,7 @@ public class OrderService extends BaseService {
         if (remaining < 0) throw new ServiceException("재고가 충분하지 않습니다.");
         updateRemaining(entityOld.getProductId(), new InventoryUpsertDto(remaining));
         OrderEntity entity = modelMapper.map(dtoNew, OrderEntity.class);
+        /* 하위 내용은 객체 중심으로 수정 권장 */
         entity.setId(entityOld.getId());
         entity.setProductId(entityOld.getProductId());
         ProductHistoryDto history = getRecentProductHistory(entity.getProductId());
@@ -102,6 +103,7 @@ public class OrderService extends BaseService {
         return entityId;
     }
 
+    /* 아래 내용은 역할 분리 */
     private boolean isEnoughRemaining(String productId, Integer count) throws Exception {
         InventoryDto result = getRemaining(productId);
         return result.getRemaining() >= count;
